@@ -11,16 +11,15 @@ function [coefficients, minSSE] = threeparametercooling(x,y)
     xSquared = xSorted.^2;
     xy = xSorted.*ySorted;
     
-    for i = 2:n-1
-    
-    
-        numGreater = n - i + 1;
-        sumYGreater = sum(ySorted(i:end));  
-        sumXGreater = sum(xSorted(i:end));
-        sumXSquaredGreater = sum(xSquared(i:end));
-        sumXYGreater = sum(xy(i:end));
+    for m = 2:n-1
+        L = m - 1; %Using capital L because lowercase l looks too close to 1. 
+        numGreater = n - L;  %n_>
+        sumYGreater = sum(ySorted(m:n));  
+        sumXGreater = sum(xSorted(m:n));
+        sumXSquaredGreater = sum(xSquared(m:n));
+        sumXYGreater = sum(xy(m:n));
         
-        b0 = mean(ySorted(1:i-1));   %EQ. 17
+        b0 = mean(ySorted(1:L));   %EQ. 17
         b1 = (numGreater*sumXYGreater-sumXGreater*sumYGreater)/ ...
                 (numGreater*sumXSquaredGreater-sumXGreater*sumXGreater); %EQ. 18
         
@@ -39,6 +38,7 @@ function [coefficients, minSSE] = threeparametercooling(x,y)
            coefficients(1) = b0;
            coefficients(2) = b1;
            coefficients(3) = b2;
-        end                              
+        end        
+        
     end                    
 end
