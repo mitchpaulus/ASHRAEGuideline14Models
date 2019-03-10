@@ -1,7 +1,7 @@
-function [coefficients, minSSE] = threeparametercooling(x,y)
-% THREEPARAMETERCOOLING
+function [coefficients, minSSE] = threeparameterheating(x,y)
+% THREEPARAMETERHEATING
 %   USAGE: 
-%     [coefficients, minSSE] = threeparametercooling(x, y)
+%     [coefficients, minSSE] = threeparameterheating(x, y)
 %
 %   x: 1-D vector of x values
 %   y: 1-D vector of y values
@@ -29,25 +29,24 @@ function [coefficients, minSSE] = threeparametercooling(x,y)
     xSquared = xSorted.^2;
     xy = xSorted.*ySorted;
     
-    for m = 2:n-1
+    for m = 3:n
         L = m - 1; %Using capital L because lowercase l looks too close to 1. 
-        numGreater = n - L;  %n_>
-        sumYGreater = sum(ySorted(m:n));  
-        sumXGreater = sum(xSorted(m:n));
-        sumXSquaredGreater = sum(xSquared(m:n));
-        sumXYGreater = sum(xy(m:n));
+        sumYLower = sum(ySorted(1:L));  
+        sumXLower = sum(xSorted(1:L));
+        sumXSquaredLower = sum(xSquared(1:L));
+        sumXYLower = sum(xy(1:L));
         
-        b0 = mean(ySorted(1:L));   %EQ. 17
-        b1 = (numGreater*sumXYGreater-sumXGreater*sumYGreater)/ ...
-                (numGreater*sumXSquaredGreater-sumXGreater*sumXGreater); %EQ. 18
+        b0 = mean(ySorted(m:n));   %EQ. 27
+        b1 = (sumXLower * sumYLower - L * sumXYLower) / ...
+                (L * sumXSquaredLower - sumXLower * sumXLower); %EQ. 28
         
-        N = (n-numGreater)*sumXYGreater*sumXGreater + ...
-                sumXSquaredGreater*(numGreater*sumY-n*sumYGreater) + ...
-                sumXGreater*sumXGreater*(sumYGreater-sumY);  %EQ. 20
-        D = (n-numGreater)*(numGreater*sumXYGreater-sumXGreater*sumYGreater); %EQ. 21.
-        b2 = N/D;  %EQ. 19
+        N = (n - L) * (sumXLower * sumXYLower) + L * sumXSquaredLower * sumY - ...
+                sumY * sumXLower * sumXLower - n * sumXSquaredLower * sumYLower + ...
+                sumYLower * sumXLower * sumXLower;  %EQ. 20
+        D = (n - L) * (L * sumXYLower - sumXLower  * sumXLower); %EQ. 31.
+        b2 = N/D;  %EQ. 29
                 
-        residuals = y - b0 - b1*(max(x-b2,0));
+        residuals = y - b0 - b1*(max(b2 - x,0));
         
         sse = sum(residuals.^2);
         
