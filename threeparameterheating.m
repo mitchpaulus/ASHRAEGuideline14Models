@@ -42,7 +42,7 @@ function [coefficients, minSSE] = threeparameterheating(x,y)
         
         N = (n - L) * (sumXLower * sumXYLower) + L * sumXSquaredLower * sumY - ...
                 sumY * sumXLower * sumXLower - n * sumXSquaredLower * sumYLower + ...
-                sumYLower * sumXLower * sumXLower;  %EQ. 20
+                sumYLower * sumXLower * sumXLower;  %EQ. 30
         D = (n - L) * (L * sumXYLower - sumXLower  * sumXLower); %EQ. 31.
         b2 = N/D;  %EQ. 29
                 

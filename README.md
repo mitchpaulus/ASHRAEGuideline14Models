@@ -1,5 +1,13 @@
 # ASHRAEGuideline14Models
 This repository contains different linear change points related to ASHRAE Guideline 14. 
 
-## Available Models
-threeparametercooling.m is a Matlab script that completes the three parameter cooling model of the form ![equation](/3PCEquation.jpg). It returns the coefficients and the sum of squared errors.
+## Available Models 
+
+The three parameter cooling and heating models are currently available.
+
+```Matlab
+[coefficients, minSSE] = threeparametercooling(x, y);
+[coefficients, minSSE] = threeparameterheating(x, y);
+```
+
+The four and five parameter models are currently not available.
